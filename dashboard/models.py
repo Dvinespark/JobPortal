@@ -21,12 +21,14 @@ EMPLOYMENT_TYPE = (
 
 
 class Employer(models.Model):
+    class Meta:
+        db_table = "Employer"
     job_title = models.CharField(max_length=250, blank=False, null=False)
     company = models.CharField(max_length=100)
     logo = models.ImageField(upload_to=LOGO_PATH)
     job_description = models.TextField()
     email = models.CharField(max_length=100)
-    rate = models.DecimalField(default=0.0, max_digits=20, decimal_places=4)
+    rate = models.DecimalField(default=0.0, max_digits=20, decimal_places=2)
     availability = models.CharField(max_length=30, choices=AVAILABILITY_CHOICES)
     duration = models.CharField(max_length=50)
     employment_type = models.CharField(max_length=30, choices=EMPLOYMENT_TYPE)
@@ -40,16 +42,14 @@ class Employer(models.Model):
 
 
 class Employees(models.Model):
-    job_id = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    class Meta:
+        db_table = "Employees"
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50, blank=True, null=True)
     email = models.CharField(max_length=100)
-    skill1 = models.CharField(max_length=50, blank=True, null=True)
-    skill1_experience_year = models.IntegerField(default=0)
-    skill2 = models.CharField(max_length=50, blank=True, null=True)
-    skill2_experience_year = models.IntegerField(default=0)
-    skill3 = models.CharField(max_length=50, blank=True, null=True)
-    skill3_experience_year = models.IntegerField(default=0)
+    skill = models.CharField(max_length=50, blank=True, null=True)
+    experience_year = models.IntegerField(default=0)
     phone_number = models.CharField(max_length=15)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES)
     availability = models.CharField(max_length=30, choices=AVAILABILITY_CHOICES)
@@ -60,4 +60,4 @@ class Employees(models.Model):
     updated_by = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return self.email + ' -- ' + str(self.job_id)
+        return self.email + ' -- ' + str(self.employer)

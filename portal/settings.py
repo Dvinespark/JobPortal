@@ -125,6 +125,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
+    'logo/',
+    'portal/'
 )
 STATIC_ROOT = BASE_DIR / 'static_root'
 

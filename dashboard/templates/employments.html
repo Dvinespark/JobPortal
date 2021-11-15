@@ -41,8 +41,7 @@
         <script>
             $(document).ready(function(){
                 let data = {{ data|safe }};
-                let static_url = "{% get_static_prefix %}";
-                handler(data, static_url);
+                handler(data);
             });
         </script>
     {% endblock scripts %}

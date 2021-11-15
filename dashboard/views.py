@@ -1,9 +1,9 @@
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import connection
 from django.shortcuts import render, HttpResponse
 from .db_helper import get_rows
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -24,7 +24,8 @@ def employment_list(request):
             availability,
             duration,
             employment_type,
-        date(created_at) as created_at
+            status,
+            date(created_at) as created_at
         from employer;
     """
     results = get_rows(sql)
@@ -69,8 +70,9 @@ def job_seeker_list(request):
     """
 
     results = get_rows(sql)
+    data = json.dumps(results, cls=DjangoJSONEncoder)
     context = {
-        'data': json.dumps(results, cls=DjangoJSONEncoder)
+        'data': data
     }
     print(context['data'])
     return render(request, 'jobseekers.html', context=context)
@@ -87,4 +89,29 @@ def job_seeker_update(request, id):
 def job_seeker_delete(request, id):
     return HttpResponse("delete")
 
+
 # ----------------End of Employees------------------
+def seekers_filter(request):
+    # check if request params exists
+    skills = request.GET.get('skills', '')
+    years = request.GET.get('years', '')
+    lastname = request.GET.get('lastname', '')
+    query = """
+        SELECT id,
+            firstname,
+            lastname,
+            email,
+            skill,
+            experience_year,
+            phone_number,
+            status,
+            availability,
+            resume,
+            employer_id
+        FROM
+        employees
+        WHERE lower(skill) like '%{0}%' and experience_year like '%{1}%' and lower(lastname) like '%{2}%'; """\
+        .format(skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
+    results = get_rows(sql=query)
+    data = json.dumps(results, cls=DjangoJSONEncoder)
+    return JsonResponse({"status": 200, "data": data})

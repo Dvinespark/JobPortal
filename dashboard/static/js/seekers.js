@@ -49,64 +49,32 @@ function dataTable_renderer(data) {
 
 function handler(data) {
     dataTable_renderer(data);
-    $('#addUserModal').on('show.bs.modal', function (event) {
-        $('#cancel_button').on('click', function (e) {
-            $('#addUserModal').modal('toggle');
-            return false;
-        });
-        $('#addRegister_button').on('click', function (e) {
-            // Create Applicant
-            let params = {};
-            $.each($('#register_employee').serializeArray(), function (index, value) {
-                params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
-            });
-            let form_data = new FormData();
-            for (let key in params) {
-                form_data.append(key, params[key]);
-            }
-            form_data.append('resume', $("#resume")[0].files[0]);
-            console.log(form_data)
-            $.ajax({
-                type: 'post',
-                url: "create",
-                data: form_data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    console.log(response);
-                    if (response.status_code) {
-                        window.location.href = response.url;
-                    }
-                }
-            });
-            e.preventDefault();
-        });
+}
 
+$('#seeker_search_button').on('click', function (e) {
+    let params = {};
+    let form_data = $('#search_form').serializeArray();
+    $.each(form_data, function (index, value) {
+        params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
     });
-    $('#searchbar_button').on('click', function (e) {
-        let params = {};
-        $.each($('#search_form').serializeArray(), function (index, value) {
-            params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
-        });
-        let url = "/filter?"
-        for (let key in params) {
+    let url = "jobseeker/filter?"
+    for (let key in params) {
+        if (params[key]){
             url += key + "=" + params[key] + "&";
         }
+    }
+    if (url !== "jobseeker/filter?"){
         $.ajax({
             type: 'get',
             url: url,
-            processData: false,
-            contentType: false,
-            cache: false,
             success: function (response) {
-                let datatable = $("#user_dataTable").DataTable();
-                let json_data = response["data"].replaceAll("&#34;", '"');
-                let real_data = $.parseJSON(json_data);
-                datatable.clear().rows.add(real_data).draw();
+                console.log(response.data);
+                let response_data = $.parseJSON(response.data);
+                let datatable = $("#job_seekers_dataTable").DataTable();
+                datatable.clear().rows.add(response_data).draw();
             }
         });
-        e.preventDefault();
-    });
-
-}
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+});

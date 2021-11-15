@@ -1,33 +1,38 @@
 function dataTable_renderer(data){
     $('#user_dataTable').DataTable( {
         data: data,
-       "columnDefs": [
-           {
-               "targets": 3,
-               "render": (data, type, row) => {
-                   return "<a href='/media/" + data + "'>Click here</a>"
-               }
+        "columnDefs": [
+            {
+                "targets": 0,
+                "visible": false,
+                "searchable": false
+            },
+            {
+                "targets": 3,
+                "render": (data, type, row) => {
+                    return "<a href='/media/" + data + "'>Click here</a>"
+                }
 
-           },
-           {
-             "targets": 10,
-               "render": (data, type, row) => {
-                 if (data === 1){
-                     return "Active";
-                 }
-                 return "Closed";
-               }
+            },
+            {
+                "targets": 10,
+                "render": (data, type, row) => {
+                    if (data === 1){
+                        return "Active";
+                    }
+                    return "Closed";
+                }
 
-           },
-           {
-               "targets": 12,
-               "render": (data, type, row) => {
-                   let string = "<a href='#'><i class='fas fa-edit' data-toggle='tooltip' title='Edit'></i></a> " +
-                       "<a href='#'><i class='fas fa-trash' title='Delete'></i></a>";
-                   return string
+            },
+            {
+                "targets": 12,
+                "render": (data, type, row) => {
+                    let string = "<button class='btn-github apply-btn' data-jobid=" + row[0] +
+                        "><i class='fas fa-briefcase' data-toggle='tooltip' title='Apply'></i></button>";
+                    return string;
 
-               }
-           }
+                }
+            }
         ],
         columns: [
             { title: "Job id" },
@@ -45,9 +50,8 @@ function dataTable_renderer(data){
             { title: "Action"}
         ],
         bDestroy: true
-    } );
+                } );
 }
-
 
 function handler(data){
     dataTable_renderer(data);
@@ -67,7 +71,6 @@ function handler(data){
                     form_data.append(key, params[key]);
                 }
                 form_data.append('resume', $("#resume")[0].files[0]);
-                console.log(form_data)
                 $.ajax({
                     type: 'post',
                     url: "create",
@@ -95,7 +98,9 @@ function handler(data){
             for(let key in params){
                 url+=key+ "=" + params[key] +"&";
             }
-            $.ajax({
+            if(params.length > 0)
+            {
+                $.ajax({
                 type: 'get',
                 url: url,
                 processData: false,
@@ -103,12 +108,13 @@ function handler(data){
                 cache: false,
                 success: function (response) {
                     let datatable = $("#user_dataTable").DataTable();
-                    let json_data = response["data"].replaceAll("&#34;", '"');
-                    let real_data = $.parseJSON(json_data);
-                    datatable.clear().rows.add(real_data).draw();
+                    let response_data = $.parseJSON(response['data']);
+                    datatable.clear().rows.add(response_data).draw();
                 }
             });
             e.preventDefault();
+            }
+
         });
 
 }

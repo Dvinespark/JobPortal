@@ -12,13 +12,13 @@
             <div class="col-sm-6 float-right">
                 <form id="search_form">
                     <div class="row form-inline">
-                        <input class="form-control col" type="search" placeholder="Skills" value='' aria-label="Search"
+                        <input class="form-control col" type="search" placeholder="Skills" aria-label="Search"
                                name="skills">
-                        <input class="form-control col" type="search" placeholder="Number of years" value=''
+                        <input class="form-control col" type="search" placeholder="Number of years"
                                aria-label="Search" name="years">
-                        <input class="form-control col" type="search" placeholder="lastname" value=""
+                        <input class="form-control col" type="search" placeholder="lastname"
                                aria-label="Search" name="lastname">
-                        <button class="btn btn-outline-success col" type="submit" id="searchbar_button">Search</button>
+                        <button class="btn btn-outline-success col" type="submit" id="seeker_search_button">Search</button>
                     </div>
                 </form>
             </div>
@@ -45,8 +45,7 @@
         <script>
             $(document).ready(function () {
                 let data = {{ data|safe }};
-                let static_url = "{% get_static_prefix %}";
-                handler(data, static_url);
+                handler(data);
             });
         </script>
     {% endblock scripts %}

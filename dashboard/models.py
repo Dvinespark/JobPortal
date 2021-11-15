@@ -32,6 +32,7 @@ class Employer(models.Model):
     availability = models.CharField(max_length=30, choices=AVAILABILITY_CHOICES)
     duration = models.CharField(max_length=50)
     employment_type = models.CharField(max_length=30, choices=EMPLOYMENT_TYPE)
+    status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.CharField(max_length=30, blank=True, null=True)

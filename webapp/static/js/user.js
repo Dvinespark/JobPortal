@@ -27,8 +27,8 @@ function dataTable_renderer(data){
             {
                 "targets": 12,
                 "render": (data, type, row) => {
-                    let string = "<button class='btn-github apply-btn' data-jobid=" + row[0] +
-                        "><i class='fas fa-briefcase' data-toggle='tooltip' title='Apply'></i></button>";
+                    let string = "<a class='btn-github apply-btn' href='#applyJob' data-toggle='modal' data-jobid=" + row[0] +
+                        "><i class='fas fa-briefcase' data-toggle='tooltip' title='Apply'></i></a>";
                     return string;
 
                 }
@@ -55,9 +55,9 @@ function dataTable_renderer(data){
 
 function handler(data){
     dataTable_renderer(data);
-    $('#addUserModal').on('show.bs.modal', function (event) {
+    $('#applyJob').on('show.bs.modal', function (event) {
             $('#cancel_button').on('click', function (e) {
-                $('#addUserModal').modal('toggle');
+                $('#applyJob').modal('toggle');
                 return false;
             });
             $('#addRegister_button').on('click', function (e){

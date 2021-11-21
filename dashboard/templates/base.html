@@ -48,11 +48,14 @@
             <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
                 <ul class="navbar-nav ms-auto d-flex align-items-center">
                     <!-- User profile -->
-                    <li>
-                        <a class="profile-pic" href="#">
-                            <img src="{% static 'images/profile.jpg' %}" alt="user-img" width="36"
-                                 class="img-circle"><span class="text-white font-medium">Admin</span></a>
-                    </li>
+                   {% if request.user.is_authenticated %}
+                       <li>
+                           <a class="profile-pic" href="#">
+                               <img src="{% static 'images/profile.jpg' %}" alt="user-img" width="36"
+                                    class="img-circle"><span class="text-white font-medium">{{ request.user.username }}</span></a>
+                       </li>
+                    {% else %}
+                       <a href="{% url 'webapp:home' %}">Login</a>{% endif %}
                 </ul>
             </div>
         </nav>
@@ -74,14 +77,14 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'employment_list' %}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'dashboard:employment_list' %}"
                            aria-expanded="false">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <span class="hide-menu">Employments</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'job_seeker_list' %}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'dashboard:job_seeker_list' %}"
                            aria-expanded="false">
                             <i class="fa fa-table" aria-hidden="true"></i>
                             <span class="hide-menu">Job Seekers</span>

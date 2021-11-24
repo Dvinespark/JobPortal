@@ -1,13 +1,13 @@
 import json
-
+import datetime
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import reverse
+from dashboard.models import Employer
 
 from dashboard.db_helper import get_rows
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, JobApplyForm
 from django.contrib import messages
 
 
@@ -36,10 +36,12 @@ def home(request):
     # for user login and register
     register_form = UserRegisterForm()
     login_form = AuthenticationForm()
+    job_form = JobApplyForm()
     context = {
         'data': home_data(),
         'register_form': register_form,
-        'login_form': login_form
+        'login_form': login_form,
+        'job_form': job_form
     }
     return render(request, 'index.html', context=context)
 
@@ -91,3 +93,49 @@ def logout_request(request):
     logout(request)
     messages.info(request, "You have successfully logged out.")
     return redirect('webapp:home')
+
+
+def apply_job(request):
+    print("Apply job triggered")
+    if request.method == "POST":
+        skill1 = request.POST.get("skill1", None)
+        nskill1 = request.POST.get("nskill1", None)
+        skill2 = request.POST.get("skill2", None)
+        nskill2 = request.POST.get("nskill2", None)
+        skill3 = request.POST.get("skill3", None)
+        nskill3 = request.POST.get("nskill3", None)
+        job_id = request.POST.get("job_id", None)
+        form_data = {
+            "employer": Employer.objects.get(id=int(job_id)),
+            "firstname": request.POST.get('firstname', ''),
+            "lastname": request.POST.get('lastname', ''),
+            "email": request.POST.get('email', ''),
+            "phone_number": request.POST.get('phone_number', None),
+            "status": request.POST.get("status", None),
+            "availability": request.POST.get("availability", None)
+
+        }
+        if 'resume' in request.FILES:
+            form_data['resume'] = request.FILES['resume']
+        if skill1 is not None:
+            form_data['skill'] = skill1
+            form_data['experience_year'] = nskill1
+            form = JobApplyForm(form_data)
+            if form.is_valid():
+                print("form is valid")
+                form.save()
+
+        if skill2 is not None:
+            form_data['skill'] = skill2
+            form_data['experience_year'] = nskill2
+            form = JobApplyForm(form_data)
+            if form.is_valid():
+                form.save()
+
+        if skill3 is not None:
+            form_data['skill'] = skill3
+            form_data['experience_year'] = nskill3
+            form = JobApplyForm(form_data)
+            if form.is_valid():
+                form.save()
+        return redirect('webapp:home')

@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from dashboard.models import Employees
+import datetime
 
 
 class UserRegisterForm(UserCreationForm):
@@ -16,3 +18,16 @@ class UserRegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class JobApplyForm(forms.ModelForm):
+    class Meta:
+        model = Employees
+        fields = ['employer', 'firstname', 'lastname', 'email', 'phone_number', 'status', 'availability', 'resume']
+
+    def save(self, commit=True):
+        employees = super().save(commit=False)
+        employees.created_at = datetime.datetime.now()
+        if commit:
+            employees.save()
+        return employees

@@ -56,36 +56,38 @@ function dataTable_renderer(data){
 function handler(data){
     dataTable_renderer(data);
     $('#applyJob').on('show.bs.modal', function (event) {
-            $('#cancel_button').on('click', function (e) {
-                $('#applyJob').modal('toggle');
-                return false;
+        let job_id = $(event.relatedTarget).data("jobid");
+        $('#cancel_job_button').on('click', function (e) {
+            $('#applyJob').modal('toggle');
+            return false;
+        });
+        $('#apply_job_button').on('click', function (e){
+            // Create Applicant
+            let params = {};
+            $.each($('#apply_job_form').serializeArray(), function (index, value) {
+                params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
             });
-            $('#addRegister_button').on('click', function (e){
-                // Create Applicant
-                let params = {};
-                $.each($('#register_employee').serializeArray(), function (index, value) {
-                    params[value.name] = params[value.name] ? params[value.name] || value.value : value.value;
-                });
-                let form_data = new FormData();
-                for(let key in params){
-                    form_data.append(key, params[key]);
-                }
-                form_data.append('resume', $("#resume")[0].files[0]);
-                $.ajax({
-                    type: 'post',
-                    url: "create",
-                    data: form_data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (response) {
-                        console.log(response);
-                        if(response.status_code){
-                            window.location.href = response.url;
-                        }
+            let form_data = new FormData();
+            for(let key in params){
+                form_data.append(key, params[key]);
+            }
+            form_data.append('resume', $("#resume")[0].files[0]);
+            form_data.append('job_id', job_id);
+            $.ajax({
+                type: 'post',
+                url: "apply",
+                data: form_data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    if(response.status_code){
+                        window.location.href = response.url;
                     }
-                });
-                e.preventDefault();
+                }
+            });
+            e.preventDefault();
             });
 
         });

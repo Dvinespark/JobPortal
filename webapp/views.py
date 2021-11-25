@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from dashboard.db_helper import get_rows
 from .forms import UserRegisterForm, JobApplyForm
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 def home_data():
@@ -145,8 +146,9 @@ def apply_job(request):
                 data.employer = Employer.objects.get(id=1)
                 data.save()
                 print("form is valid")
-        return {
+        return JsonResponse({
             "status_code": 200,
-            "message": "user created successfully.",
+            "message": "job applied successfully.",
             "url": reverse_lazy('webapp:home')
-        }
+        })
+    return redirect("webapp:home")

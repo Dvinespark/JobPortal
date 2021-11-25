@@ -2,10 +2,10 @@ import json
 import datetime
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.serializers.json import DjangoJSONEncoder
 from dashboard.models import Employer
-
+from django.urls import reverse_lazy
 from dashboard.db_helper import get_rows
 from .forms import UserRegisterForm, JobApplyForm
 from django.contrib import messages
@@ -115,27 +115,38 @@ def apply_job(request):
             "availability": request.POST.get("availability", None)
 
         }
-        if 'resume' in request.FILES:
-            form_data['resume'] = request.FILES['resume']
+
         if skill1 is not None:
             form_data['skill'] = skill1
             form_data['experience_year'] = nskill1
-            form = JobApplyForm(form_data)
+            form = JobApplyForm(form_data, request.FILES)
             if form.is_valid():
+                data = form.save(commit=False)
+                data.employer = Employer.objects.get(id=1)
+                data.save()
                 print("form is valid")
-                form.save()
 
         if skill2 is not None:
             form_data['skill'] = skill2
             form_data['experience_year'] = nskill2
-            form = JobApplyForm(form_data)
+            form = JobApplyForm(form_data, request.FILES)
             if form.is_valid():
-                form.save()
+                data = form.save(commit=False)
+                data.employer = Employer.objects.get(id=1)
+                data.save()
+                print("form is valid")
 
         if skill3 is not None:
             form_data['skill'] = skill3
             form_data['experience_year'] = nskill3
-            form = JobApplyForm(form_data)
+            form = JobApplyForm(form_data, request.FILES)
             if form.is_valid():
-                form.save()
-        return redirect('webapp:home')
+                data = form.save(commit=False)
+                data.employer = Employer.objects.get(id=1)
+                data.save()
+                print("form is valid")
+        return {
+            "status_code": 200,
+            "message": "user created successfully.",
+            "url": reverse_lazy('webapp:home')
+        }

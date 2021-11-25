@@ -63,18 +63,16 @@ $('#seeker_search_button').on('click', function (e) {
             url += key + "=" + params[key] + "&";
         }
     }
-    if (url !== "jobseeker/filter?"){
-        $.ajax({
-            type: 'get',
-            url: url,
-            success: function (response) {
-                console.log(response.data);
-                let response_data = $.parseJSON(response.data);
-                let datatable = $("#job_seekers_dataTable").DataTable();
-                datatable.clear().rows.add(response_data).draw();
-            }
-        });
-    }
+    $.ajax({
+        type: 'get',
+        url: url,
+        success: function (response) {
+            console.log(response.data);
+            let response_data = $.parseJSON(response.data);
+            let datatable = $("#job_seekers_dataTable").DataTable();
+            datatable.clear().rows.add(response_data).draw();
+        }
+    });
     e.preventDefault();
     e.stopImmediatePropagation();
 });

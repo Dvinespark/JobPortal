@@ -23,11 +23,4 @@ class UserRegisterForm(UserCreationForm):
 class JobApplyForm(forms.ModelForm):
     class Meta:
         model = Employees
-        fields = ['employer', 'firstname', 'lastname', 'email', 'phone_number', 'status', 'availability', 'resume']
-
-    def save(self, commit=True):
-        employees = super().save(commit=False)
-        employees.created_at = datetime.datetime.now()
-        if commit:
-            employees.save()
-        return employees
+        fields = ['employer', 'firstname', 'lastname', 'email', 'phone_number', 'status', 'availability', 'resume', 'skill', 'experience_year']

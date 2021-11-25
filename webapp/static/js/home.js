@@ -74,7 +74,7 @@ function handler(data){
             form_data.append('resume', $("#resume")[0].files[0]);
             form_data.append('job_id', job_id);
             $.ajax({
-                type: 'post',
+                method: "POST",
                 url: "apply",
                 data: form_data,
                 processData: false,

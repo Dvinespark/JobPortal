@@ -1,9 +1,12 @@
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .db_helper import get_rows
 from django.http import JsonResponse
+from django.urls import reverse_lazy
+from .forms import EmploymentForm
+from .models import Employer
 
 
 # Create your views here.
@@ -37,15 +40,76 @@ def employment_list(request):
 
 
 def employment_create(request):
-    return HttpResponse("Create")
+    # TODO Error handling and optimization required
+
+    if request.method == "POST":
+        form_data = {
+            "job_title": request.POST.get('job_title', ''),
+            "company": request.POST.get('company', ''),
+            "email": request.POST.get('email', ''),
+            "job_description": request.POST.get('job_description', None),
+            "rate": request.POST.get("rate", None),
+            "availability": request.POST.get("availability", None),
+            "duration": request.POST.get("duration", None),
+            "employment_type": request.POST.get("employment_type", None),
+            "status": True,
+            "created_by": request.user.username,
+            "updated_by": None
+
+        }
+        form = EmploymentForm(form_data, request.FILES)
+        if form.is_valid():
+            form.save()
+        return JsonResponse({
+            "status_code": 200,
+            "message": "job applied successfully.",
+            "url": reverse_lazy('dashboard:employment_list')
+        })
+    return redirect("dashboard:employment_list")
 
 
-def employment_update(request, id):
-    return HttpResponse("update")
+def employment_update(request, job_id):
+    if request.method == "GET":
+        form = EmploymentForm(instance=Employer.objects.get(id=job_id))
+        context_data = {
+            'employment_form': form
+        }
+        return render(request, "index.html", context= context_data)
+    if request.method == "POST":
+        instance = Employer.objects.get(id=job_id)
+
+        form_data = {
+            "job_title": request.POST.get('job_title', ''),
+            "company": request.POST.get('company', ''),
+            "email": request.POST.get('email', ''),
+            "job_description": request.POST.get('job_description', None),
+            "rate": request.POST.get("rate", None),
+            "availability": request.POST.get("availability", None),
+            "duration": request.POST.get("duration", None),
+            "employment_type": request.POST.get("employment_type", None),
+            "status": request.POST.get('status', True),
+            "created_by": instance.created_by,
+            "updated_by": request.user.username
+
+        }
+        form = EmploymentForm(form_data, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+        return JsonResponse({
+            "status_code": 200,
+            "message": "job applied successfully.",
+            "url": reverse_lazy('dashboard:employment_list')
+        })
 
 
-def employment_delete(request, id):
-    return HttpResponse("delete")
+def employment_delete(request, job_id):
+    instance = Employer.objects.get(id=job_id)
+    instance.delete()
+    return JsonResponse({
+        "status_code": 200,
+        "message": "Record deleted successfully.",
+        "url": reverse_lazy('dashboard:employment_list')
+    })
 
 
 # ----------------End of Employment------------------

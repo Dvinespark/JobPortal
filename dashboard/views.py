@@ -29,8 +29,11 @@ def employment_list(request):
             employment_type,
             status,
             date(created_at) as created_at
-        from employer;
+        from employer
     """
+
+    if request.user.groups.filter(name="SecondAdmin"):
+        sql += "where created_by = '" + request.user.username + "'"
     results = get_rows(sql)
     context = {
         'data': json.dumps(results, cls=DjangoJSONEncoder)
@@ -84,21 +87,23 @@ def employment_delete(request, job_id):
 # ----------------Employees------------------
 def job_seeker_list(request):
     sql = """
-        SELECT id,
-            firstname,
-            lastname,
-            email,
-            skill,
-            experience_year,
-            phone_number,
-            status,
-            availability,
-            resume,
-            employer_id
+        SELECT s.id,
+            s.firstname,
+            s.lastname,
+            s.email,
+            s.skill,
+            s.experience_year,
+            s.phone_number,
+            s.status,
+            s.availability,
+            s.resume,
+            s.employer_id
         FROM
-        employees;
+        employees as s
     """
-
+    if request.user.groups.filter(name="SecondAdmin"):
+        sql += "inner join employer e " \
+               "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
     results = get_rows(sql)
     data = json.dumps(results, cls=DjangoJSONEncoder)
     context = {

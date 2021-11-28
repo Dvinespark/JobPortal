@@ -120,7 +120,7 @@ def apply_job(request):
         skills = [skill1, skill2, skill3]
         years_skills = [nskill1, nskill2, nskill3]
         for skill, years in zip(skills, years_skills):
-            if skill is not None:
+            if skill is not None and skill != '':
                 form_data['skill'] = skill
                 form_data['experience_year'] = years
                 form = JobApplyForm(form_data, request.FILES)

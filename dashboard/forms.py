@@ -11,3 +11,14 @@ class EmploymentForm(forms.ModelForm):
             'created_by': forms.HiddenInput(),
             'updated_by': forms.HiddenInput(),
         }
+
+
+class SeekerForm(forms.ModelForm):
+    class Meta:
+        model = Employees
+        fields = ['employer', 'firstname', 'lastname', 'email', 'skill', 'experience_year', 'phone_number', 'status',
+                  'availability', 'resume', 'created_by', 'updated_by']
+        widgets = {
+            'created_by': forms.HiddenInput(),
+            'updated_by': forms.HiddenInput(),
+        }

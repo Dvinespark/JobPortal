@@ -5,8 +5,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from .db_helper import get_rows
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from .forms import EmploymentForm
-from .models import Employer
+from .forms import EmploymentForm, SeekerForm
+from .models import Employer, Employees
 
 
 # Create your views here.
@@ -108,16 +108,42 @@ def job_seeker_list(request):
     return render(request, 'jobseekers.html', context=context)
 
 
-def job_seeker_create(request):
-    return HttpResponse("Create")
+def seeker_create(request):
+    if request.method == "GET":
+        form = SeekerForm()
+        return render(request, 'seeker_create.html', context={"form": form})
+    if request.method == "POST":
+        form = SeekerForm(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.created_by = request.user.username
+            data.updated_by = None
+            data.save()
+        return redirect("dashboard:job_seeker_list")
 
 
-def job_seeker_update(request, id):
-    return HttpResponse("update")
+def seeker_update(request, seeker_id):
+    if request.method == "GET":
+        form = SeekerForm(instance=Employees.objects.get(id=seeker_id))
+        context_data = {
+            'form': form,
+            'seeker_id': seeker_id
+        }
+        return render(request, "seeker_update.html", context=context_data)
+    if request.method == "POST":
+        instance = Employees.objects.get(id=seeker_id)
+        form = SeekerForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.updated_by = request.user.username
+            data.save()
+        return redirect("dashboard:job_seeker_list")
 
 
-def job_seeker_delete(request, id):
-    return HttpResponse("delete")
+def seeker_delete(request, seeker_id):
+    instance = Employees.objects.get(id=seeker_id)
+    instance.delete()
+    return redirect("dashboard:job_seeker_list")
 
 
 # ----------------End of Employees------------------

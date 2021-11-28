@@ -22,8 +22,8 @@ function dataTable_renderer(data) {
             {
                 "targets": 11,
                 "render": (data, type, row) => {
-                    let string = "<a href='#'><i class='fas fa-edit' data-toggle='tooltip' title='Edit'></i></a> " +
-                        "<a href='#'><i class='fas fa-trash' title='Delete'></i></a>";
+                    let string = "<a href='/dashboard/seeker/update/" + row[0] + "'><i class='fas fa-edit' data-toggle='tooltip' title='Edit'></i></a> " +
+                        "<a href='/dashboard/seeker/delete/" + row[0]+ "'><i class='fas fa-trash' title='Delete'></i></a>";
                     return string
 
                 }
@@ -34,7 +34,7 @@ function dataTable_renderer(data) {
             {title: "Firstname"},
             {title: "Lastname"},
             {title: "Email"},
-            {title: "Skill 1"},
+            {title: "Skill"},
             {title: "Experience Year"},
             {title: "Phone Number"},
             {title: "Status"},

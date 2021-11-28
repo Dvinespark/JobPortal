@@ -41,75 +41,41 @@ def employment_list(request):
 
 def employment_create(request):
     # TODO Error handling and optimization required
-
+    if request.method == "GET":
+        form = EmploymentForm()
+        return render(request, 'employment_create.html', context={"form": form})
     if request.method == "POST":
-        form_data = {
-            "job_title": request.POST.get('job_title', ''),
-            "company": request.POST.get('company', ''),
-            "email": request.POST.get('email', ''),
-            "job_description": request.POST.get('job_description', None),
-            "rate": request.POST.get("rate", None),
-            "availability": request.POST.get("availability", None),
-            "duration": request.POST.get("duration", None),
-            "employment_type": request.POST.get("employment_type", None),
-            "status": True,
-            "created_by": request.user.username,
-            "updated_by": None
-
-        }
-        form = EmploymentForm(form_data, request.FILES)
+        form = EmploymentForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-        return JsonResponse({
-            "status_code": 200,
-            "message": "job applied successfully.",
-            "url": reverse_lazy('dashboard:employment_list')
-        })
-    return redirect("dashboard:employment_list")
+            data = form.save(commit=False)
+            data.created_by = request.user.username
+            data.updated_by = None
+            data.save()
+        return redirect("dashboard:employment_list")
 
 
 def employment_update(request, job_id):
     if request.method == "GET":
         form = EmploymentForm(instance=Employer.objects.get(id=job_id))
         context_data = {
-            'employment_form': form
+            'form': form,
+            'job_id': job_id
         }
-        return render(request, "index.html", context= context_data)
+        return render(request, "employment_update.html", context=context_data)
     if request.method == "POST":
         instance = Employer.objects.get(id=job_id)
-
-        form_data = {
-            "job_title": request.POST.get('job_title', ''),
-            "company": request.POST.get('company', ''),
-            "email": request.POST.get('email', ''),
-            "job_description": request.POST.get('job_description', None),
-            "rate": request.POST.get("rate", None),
-            "availability": request.POST.get("availability", None),
-            "duration": request.POST.get("duration", None),
-            "employment_type": request.POST.get("employment_type", None),
-            "status": request.POST.get('status', True),
-            "created_by": instance.created_by,
-            "updated_by": request.user.username
-
-        }
-        form = EmploymentForm(form_data, request.FILES, instance=instance)
+        form = EmploymentForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            form.save()
-        return JsonResponse({
-            "status_code": 200,
-            "message": "job applied successfully.",
-            "url": reverse_lazy('dashboard:employment_list')
-        })
+            data = form.save(commit=False)
+            data.updated_by = request.user.username
+            data.save()
+        return redirect("dashboard:employment_list")
 
 
 def employment_delete(request, job_id):
     instance = Employer.objects.get(id=job_id)
     instance.delete()
-    return JsonResponse({
-        "status_code": 200,
-        "message": "Record deleted successfully.",
-        "url": reverse_lazy('dashboard:employment_list')
-    })
+    return redirect("dashboard:employment_list")
 
 
 # ----------------End of Employment------------------

@@ -22,8 +22,8 @@ function dataTable_renderer(data){
            {
                "targets": 12,
                "render": (data, type, row) => {
-                   let string = "<a href='#'><i class='fas fa-edit' data-toggle='tooltip' title='Edit'></i></a> " +
-                       "<a href='#'><i class='fas fa-trash' title='Delete'></i></a>";
+                   let string = "<a href='/dashboard/employment/update/" + row[0] + "'><i class='fas fa-edit' data-toggle='tooltip' title='Edit'></i></a> " +
+                       "<a href='/dashboard/employment/delete/" + row[0] + "'><i class='fas fa-trash' title='Delete'></i></a>";
                    return string
 
                }

@@ -26,7 +26,7 @@ def home_data():
             employment_type,
             status,
             date(created_at) as created_at
-        from employer;
+        from Employer;
     """
     results = get_rows(sql)
     return json.dumps(results, cls=DjangoJSONEncoder)

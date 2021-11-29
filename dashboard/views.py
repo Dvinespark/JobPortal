@@ -29,7 +29,7 @@ def employment_list(request):
             employment_type,
             status,
             date(created_at) as created_at
-        from employer
+        from Employer
     """
 
     if request.user.groups.filter(name="SecondAdmin"):
@@ -99,10 +99,10 @@ def job_seeker_list(request):
             s.resume,
             s.employer_id
         FROM
-        employees as s
+        Employees as s
     """
     if request.user.groups.filter(name="SecondAdmin"):
-        sql += "inner join employer e " \
+        sql += "inner join Employer e " \
                "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
     results = get_rows(sql)
     data = json.dumps(results, cls=DjangoJSONEncoder)
@@ -170,7 +170,7 @@ def seekers_filter(request):
             resume,
             employer_id
         FROM
-        employees
+        Employees
         WHERE lower(skill) like '%{0}%' and experience_year like '%{1}%' and lower(lastname) like '%{2}%'; """\
         .format(skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
     results = get_rows(sql=query)

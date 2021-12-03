@@ -1,5 +1,4 @@
 import json
-import datetime
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect, get_object_or_404
@@ -61,16 +60,11 @@ def register_request(request):
 
 
 def login_request(request):
-    print("function triggered")
     if request.method == "POST":
-        print(request.POST)
         form = AuthenticationForm(request, data=request.POST or None)
-        print(form)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            print(username)
-            print(password)
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)

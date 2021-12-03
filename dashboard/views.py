@@ -11,35 +11,43 @@ from .models import Employer, Employees
 
 # Create your views here.
 def index(request):
-    return render(request, 'dashboard.html', context={})
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.groups.filter(name="SecondAdmin").exists():
+            return render(request, 'dashboard.html', context={})
+        else:
+            return redirect('webapp:home')
+    return redirect('webapp:login')
 
 
 # ----------------Employment------------------
 def employment_list(request):
-    sql = """
-        SELECT id, 
-            job_title,
-            company,
-            logo,
-            job_description,
-            email,
-            rate,
-            availability,
-            duration,
-            employment_type,
-            status,
-            date(created_at) as created_at
-        from Employer
-    """
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.groups.filter(name="SecondAdmin").exists():
+            sql = """
+                SELECT id, 
+                    job_title,
+                    company,
+                    logo,
+                    job_description,
+                    email,
+                    rate,
+                    availability,
+                    duration,
+                    employment_type,
+                    status,
+                    date(created_at) as created_at
+                from Employer
+            """
 
-    if request.user.groups.filter(name="SecondAdmin"):
-        sql += "where created_by = '" + request.user.username + "'"
-    results = get_rows(sql)
-    context = {
-        'data': json.dumps(results, cls=DjangoJSONEncoder)
-    }
-    print(context['data'])
-    return render(request, 'employments.html', context=context)
+            if request.user.groups.filter(name="SecondAdmin"):
+                sql += "where created_by = '" + request.user.username + "'"
+            results = get_rows(sql)
+            context = {
+                'data': json.dumps(results, cls=DjangoJSONEncoder)
+            }
+            return render(request, 'employments.html', context=context)
+        return redirect('webapp:home')
+    return redirect('webapp:login')
 
 
 def employment_create(request):
@@ -86,31 +94,36 @@ def employment_delete(request, job_id):
 
 # ----------------Employees------------------
 def job_seeker_list(request):
-    sql = """
-        SELECT s.id,
-            s.firstname,
-            s.lastname,
-            s.email,
-            s.skill,
-            s.experience_year,
-            s.phone_number,
-            s.status,
-            s.availability,
-            s.resume,
-            s.employer_id
-        FROM
-        Employees as s
-    """
-    if request.user.groups.filter(name="SecondAdmin"):
-        sql += "inner join Employer e " \
-               "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
-    results = get_rows(sql)
-    data = json.dumps(results, cls=DjangoJSONEncoder)
-    context = {
-        'data': data
-    }
-    print(context['data'])
-    return render(request, 'jobseekers.html', context=context)
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.groups.filter(name="SecondAdmin").exists():
+            sql = """
+                SELECT s.id,
+                    s.firstname,
+                    s.lastname,
+                    s.email,
+                    s.skill,
+                    s.experience_year,
+                    s.phone_number,
+                    s.status,
+                    s.availability,
+                    s.resume,
+                    s.employer_id
+                FROM
+                Employees as s
+            """
+            if request.user.groups.filter(name="SecondAdmin"):
+                sql += "inner join Employer e " \
+                       "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
+            results = get_rows(sql)
+            data = json.dumps(results, cls=DjangoJSONEncoder)
+            context = {
+                'data': data
+            }
+            print(context['data'])
+            return render(request, 'jobseekers.html', context=context)
+        else:
+            return redirect('webapp:home')
+    return redirect('webapp:login')
 
 
 def seeker_create(request):

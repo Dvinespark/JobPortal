@@ -43,7 +43,8 @@ def employment_list(request):
                 sql += "where created_by = '" + request.user.username + "'"
             results = get_rows(sql)
             context = {
-                'data': json.dumps(results, cls=DjangoJSONEncoder)
+                'data': json.dumps(results, cls=DjangoJSONEncoder),
+                'page_title': "Employments"
             }
             return render(request, 'employments.html', context=context)
         return redirect('webapp:home')
@@ -54,7 +55,7 @@ def employment_create(request):
     # TODO Error handling and optimization required
     if request.method == "GET":
         form = EmploymentForm()
-        return render(request, 'employment_create.html', context={"form": form})
+        return render(request, 'employment_create.html', context={"form": form, "page_title": "Employment"})
     if request.method == "POST":
         form = EmploymentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -70,7 +71,8 @@ def employment_update(request, job_id):
         form = EmploymentForm(instance=Employer.objects.get(id=job_id))
         context_data = {
             'form': form,
-            'job_id': job_id
+            'job_id': job_id,
+            'page_title': "Employment"
         }
         return render(request, "employment_update.html", context=context_data)
     if request.method == "POST":
@@ -117,7 +119,8 @@ def job_seeker_list(request):
             results = get_rows(sql)
             data = json.dumps(results, cls=DjangoJSONEncoder)
             context = {
-                'data': data
+                'data': data,
+                'page_title': "Candidates"
             }
             print(context['data'])
             return render(request, 'jobseekers.html', context=context)
@@ -129,7 +132,7 @@ def job_seeker_list(request):
 def seeker_create(request):
     if request.method == "GET":
         form = SeekerForm()
-        return render(request, 'seeker_create.html', context={"form": form})
+        return render(request, 'seeker_create.html', context={"form": form, "page_title": "Candidate"})
     if request.method == "POST":
         form = SeekerForm(request.POST, request.FILES)
         if form.is_valid():
@@ -145,7 +148,8 @@ def seeker_update(request, seeker_id):
         form = SeekerForm(instance=Employees.objects.get(id=seeker_id))
         context_data = {
             'form': form,
-            'seeker_id': seeker_id
+            'seeker_id': seeker_id,
+            'page_title': "Candidate"
         }
         return render(request, "seeker_update.html", context=context_data)
     if request.method == "POST":

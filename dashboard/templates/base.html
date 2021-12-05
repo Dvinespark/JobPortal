@@ -50,9 +50,16 @@
                     <!-- User profile -->
                    {% if request.user.is_authenticated %}
                        <li>
-                           <a class="profile-pic" href="#">
+                       <div class="dropdown show">
+                           <a class="dropdown-toggle profile-pic" href="#" role="button" data-toggle="dropdown" id="dropdownMenuLink" aria-haspopup="true" aria-expanded="false">
                                <img src="{% static 'images/profile.jpg' %}" alt="user-img" width="36"
                                     class="img-circle"><span class="text-white font-medium">{{ request.user.username }}</span></a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'webapp:logout' %}">Logout</a>
+                          </div>
+                        </div>
+
+
                        </li>
                     {% else %}
                        <a href="{% url 'webapp:home' %}">Login</a>{% endif %}
@@ -87,37 +94,16 @@
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'dashboard:job_seeker_list' %}"
                            aria-expanded="false">
                             <i class="fa fa-table" aria-hidden="true"></i>
-                            <span class="hide-menu">Job Seekers</span>
+                            <span class="hide-menu">Candidates</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
-                           aria-expanded="false">
-                            <i class="fa fa-font" aria-hidden="true"></i>
-                            <span class="hide-menu">Icon</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
-                           aria-expanded="false">
-                            <i class="fa fa-globe" aria-hidden="true"></i>
-                            <span class="hide-menu">Google Map</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
-                           aria-expanded="false">
-                            <i class="fa fa-columns" aria-hidden="true"></i>
-                            <span class="hide-menu">Blank Page</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
-                           aria-expanded="false">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            <span class="hide-menu">Error 404</span>
-                        </a>
-                    </li>
+{#                    <li class="sidebar-item">#}
+{#                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"#}
+{#                           aria-expanded="false">#}
+{#                            <i class="fa fa-info-circle" aria-hidden="true"></i>#}
+{#                            <span class="hide-menu">Error 404</span>#}
+{#                        </a>#}
+{#                    </li>#}
                 </ul>
 
             </nav>
@@ -132,7 +118,7 @@
         <div class="page-breadcrumb bg-white">
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Dashboard</h4>
+                    <h4 class="page-title">Dashboard {% if page_title %} / {{ page_title }} {% endif %}</h4>
                 </div>
             </div>
         </div>
@@ -149,6 +135,7 @@
 <script src="{% static 'plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
 <!--Custom JavaScript -->
 <script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 {% block scripts %} {% endblock scripts %}
 </body>
 

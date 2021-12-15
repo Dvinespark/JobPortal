@@ -188,7 +188,7 @@ def seekers_filter(request):
         FROM
         Employees s
         inner join Employer e
-        on s.employer_id = e.id where e.created_by = '{0}'
+        on s.employer_id = e.id and e.created_by = '{0}'
         WHERE lower(skill) like '%{1}%' and experience_year like '%{2}%' and lower(lastname) like '%{3}%'; """\
         .format(request.user.username, skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
     results = get_rows(sql=query)

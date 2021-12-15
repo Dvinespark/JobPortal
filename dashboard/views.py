@@ -113,9 +113,8 @@ def job_seeker_list(request):
                 FROM
                 Employees as s
             """
-            if request.user.groups.filter(name="SecondAdmin"):
-                sql += "inner join Employer e " \
-                       "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
+            sql += "inner join Employer e " \
+                   "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
             results = get_rows(sql)
             data = json.dumps(results, cls=DjangoJSONEncoder)
             context = {
@@ -175,21 +174,23 @@ def seekers_filter(request):
     years = request.GET.get('years', '')
     lastname = request.GET.get('lastname', '')
     query = """
-        SELECT id,
-            firstname,
-            lastname,
-            email,
-            skill,
-            experience_year,
-            phone_number,
-            status,
-            availability,
-            resume,
-            employer_id
+        SELECT s.id,
+            s.firstname,
+            s.lastname,
+            s.email,
+            s.skill,
+            s.experience_year,
+            s.phone_number,
+            s.status,
+            s.availability,
+            s.resume,
+            s.employer_id
         FROM
-        Employees
-        WHERE lower(skill) like '%{0}%' and experience_year like '%{1}%' and lower(lastname) like '%{2}%'; """\
-        .format(skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
+        Employees s
+        inner join Employer e
+        on s.employer_id = e.id where e.created_by = '{0}'
+        WHERE lower(skill) like '%{1}%' and experience_year like '%{2}%' and lower(lastname) like '%{3}%'; """\
+        .format(request.user.username, skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
     results = get_rows(sql=query)
     data = json.dumps(results, cls=DjangoJSONEncoder)
     return JsonResponse({"status": 200, "data": data})

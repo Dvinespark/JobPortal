@@ -1,8 +1,1 @@
 /venv
-/.git
-*.pyc
-__pycache__
-settings.py
-/logo
-/resume
-/migrations

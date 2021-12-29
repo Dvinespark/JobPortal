@@ -17,7 +17,7 @@ function dataTable_renderer(data){
             {
                 "targets": 10,
                 "render": (data, type, row) => {
-                    if (data === 1){
+                    if (data === true){
                         return "Active";
                     }
                     return "Closed";
@@ -52,6 +52,7 @@ function dataTable_renderer(data){
         bDestroy: true
                 } );
 }
+
 
 function handler(data){
     dataTable_renderer(data);

@@ -39,7 +39,7 @@ def employment_list(request):
                 from Employer
             """
 
-            if request.user.groups.filter(name="SecondAdmin"):
+            if request.user.groups.filter(name="SecondAdmin") and not request.user.is_superuser:
                 sql += "where created_by = '" + request.user.username + "'"
             results = get_rows(sql)
             context = {
@@ -113,8 +113,9 @@ def job_seeker_list(request):
                 FROM
                 Employees as s
             """
-            sql += "inner join Employer e " \
-                   "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
+            if not request.user.is_superuser:
+                sql += "inner join Employer e " \
+                       "on s.employer_id = e.id where e.created_by = '" + request.user.username + "'"
             results = get_rows(sql)
             data = json.dumps(results, cls=DjangoJSONEncoder)
             context = {
@@ -187,7 +188,13 @@ def seekers_filter(request):
             s.employer_id
         FROM
         Employees s
-        inner join Employer e
+        """
+    if request.user.is_superuser:
+       query += """
+            WHERE lower(skill) like '%{0}%' and experience_year like '%{1}%' and lower(lastname) like '%{2}%';
+        """.format(skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')
+    else:
+        query += """ inner join Employer e
         on s.employer_id = e.id and e.created_by = '{0}'
         WHERE lower(skill) like '%{1}%' and experience_year like '%{2}%' and lower(lastname) like '%{3}%'; """\
         .format(request.user.username, skills.lower() if skills else '', years if years else '', lastname.lower() if lastname else '')

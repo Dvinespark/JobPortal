@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'webapp',
+    'django_filters'
     'storages'
 ]
 

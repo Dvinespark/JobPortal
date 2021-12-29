@@ -62,3 +62,12 @@ class Employees(models.Model):
 
     def __str__(self):
         return self.email + ' -- ' + str(self.employer)
+
+
+class Skills(models.Model):
+    class Meta:
+        db_table = "Skills"
+
+    applicant_id = models.ForeignKey(Employees, on_delete=models.CASCADE)
+    skill = models.CharField(max_length=50, blank=True, null=True)
+    experience_year = models.IntegerField(default=0)

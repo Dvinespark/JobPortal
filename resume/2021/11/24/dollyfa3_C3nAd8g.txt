@@ -1,0 +1,134 @@
+import java.util.*;
+
+
+/*
+ * Name: 
+ * Student ID: 
+ */
+
+public class CollegeEnrollmentSystem {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // @TODO figure out how to make the invocation of our application work later
+    }
+
+}
+
+class StudentADT{
+    String studentFirstname;
+    String studentLastname;
+    String studentID;
+	
+	// Getter
+	public String getStudentFirstname() {
+		return studentFirstname;
+	}
+	public String getStudentLastname() {
+		return studentFirstname;
+	}
+	public String getStudentId() {
+		return studentID;
+	}
+	// Setter
+	public void setStudentFirstname(String x) {
+		this.studentFirstname = x;
+	}
+	public void setStudentLastname(String x) {
+		this.studentLastname = x;
+	}
+	public void setStudentId(String x) {
+		this.studentID = x;
+	}
+}
+
+
+class StudentList{
+    ArrayList<StudentADT> StudentNames;
+
+    // cohortID is the set of students in one program / term / group
+    // cohortID encodes:  programName, Term {1,2,3,4}, group
+    // sample cohort name: CSD_term3_group2
+    String cohortID;
+
+	// Getter
+	public ArrayList<StudentADT> getStudentNames() {
+		return Studentnames;
+	}
+	public String getCohortID() {
+		return cohortID;
+	}
+	// Setter
+	public void setStudentNames(ArrayList<StudentADT> x) {
+		this.StudentNames = x;
+	}
+	public void setCohortId(String x) {
+		this.cohortID = x;
+	}
+}
+class Cohort {
+	String cohortID;
+	Prgram program;
+	
+	// Getter
+	public String getCohortID() {
+		return cohortID;
+	}
+	public Program getProgram() {
+		return program;
+	}
+	// Setter
+	public void setCohortId(String x) {
+		this.cohortID = x;
+	}
+	public void setStudentNames(Program x) {
+		this.program = x;
+	}
+	
+}
+class Program{
+	String programID;
+	String programName;
+	String term;
+	ArrayList<String> course;
+	
+	// Getter
+	public String getProgramID() {
+		return cohortID;
+	}
+	public String getProgramName() {
+		return programName;
+	}
+	public String getTerm() {
+		return term;
+	}
+	public ArrayList<String> getCourse() {
+		return course;
+	}
+	// Setter
+	public void setProgramID(String x) {
+		this.programID = x;
+	}
+	public void setProgramName(String x) {
+		this.programName = x;
+	}
+	public void setTerm(String x) {
+		this.term = x;
+	}
+	public void setCourse(ArrayList<String> x) {
+		this.course = x;
+	}
+	
+}
+/*
+Job Profile :- Business Analyst
+Skills Required: 
+1. Good Domain knowledge in any of the advance programing language like Java,C++,C#.
+2. Knowledge of the  SDLC concepts like agile,Scrum,kanban etc.
+3. good knowledge of UML concepts.
+4. good analytical skills and also problem solving skils.
+5. good comunication skills to interact with client to take requirement from them and then provide a good effective design to programmer.
+Employer: DevRonnins 
+*/

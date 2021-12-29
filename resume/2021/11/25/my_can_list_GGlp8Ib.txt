@@ -1,0 +1,119 @@
+TEST Syllabus:
+
+Constructing a Simple Java Program (Like our attendance quiz last week)
+
+Classes, Objects, and Methods
+
+If then
+
+Loops: For and While
+
+Assigning to and evaluating Variables
+
+
+
+Concepts of the von Neumann Architecture
+
+
+
+What is an object
+
+Constituents of an OBJECT
+
+Connect OBJECTS with METHODS
+
+Instance and Static
+
+4 Kinds of variables
+
+What is a: Type, Class, Object
+
+
+Name: Subash Sapkota
+phone no: 14168751265
+plan: 8GB Talk and Text - BYOP
+16th of October -- activation date
+Mobile Account: 914146964
+
+
+
+
+
+
+
+Types of data
+Linked list and arrays, arrays list
+
+
+class is like a object constructor or blueprint for creating an object
+or we can say class is a template for object
+
+An object is an instance of a class
+
+class consist of three parts
+1. public class that must contain public static void main(String[] args) metho
+2. Data modeling class for handling data
+3. Other 
+
+
+data types  WHAT ARE THE KINDS OF BOXES WE HAVE TO PUT DATA INTO
+
+Primitives:
+
+Object References
+Everything in the computer is a memory location. Input and output locations, CPU registers, network sockets. Everything that relates to the hardware of the computer is a memory. We work with those hardware components through code.
+Usually we are not explicitly aware that we are going to the hardware. Programming language interpreter or compiler is an application program in the Operating System. You get to the hardware through API calls that java.exe is doing for you. Includes accessing the operating system.
+Gather input from the command line arguments via args
+
+System.in
+System.out.
+
+
+
+
+
+
+
+
+
+Work with basic control structures:
+
+Use standard input and output methods of the Java API
+
+1.2 Use variables and literals of primitive and String data types
+reate programs that implement good object oriented design.
+
+3.1 Design and implement classes in Java consisting of instance and static variables and methods
+
+3.2 Write methods/constructors that work with primitive and reference type parameters
+
+3.3 Work with visibility modifiers. Apply the public, protected, and private access modifiers to classes, methods/constructors, and instance variables
+
+3.7 Use the static keyword to implement static class members
+
+Know the 4 kinds of Java Object Variables:
+Class Static
+Class instance
+Method local 
+Loop Local
+
+static methods or variables belongs to the class rather that the object
+
+I love to work in a team and always put all my effort to learn and grow.
+
+
+
+Tell me about yourself?
+
+I have worked for more than 2 years as a software developer for the last couple of years since my graduation. And I am continously developing my skills and knowledge in different approachs to the programming architectures and optimization for an application. 
+
+In the last job, I spent most of the time developing different solutions for faster data retrieval and building apis and also partially worked as a frontend developer.
+That was the most valuable time of my life as I was not just learning to code but also getting the practical skills and knowledge about how all those online e-commerce business works specifically about the ads and prices.
+
+As I was doing my job, I thought maybe this is the right time for me to pursue higher education for learning more about this web field and new techs. and Thats when i decided to continue my eduation and left the last job.
+
+I am currently a post graduate student of Computer softtware and database developement where I am learning new technologies and languages and I am about to graduate.
+
+Coming from such a long journey, I am very much excited to work again and I am sure that this company, and the position would be a great start to boost my career and reach goals and use all those learnings I have gathered so far and make a best decision for my long-term career path.
+
+

@@ -13,7 +13,7 @@ function dataTable_renderer(data){
            {
              "targets": 10,
                "render": (data, type, row) => {
-                 if (data == true){
+                 if (data === true){
                      return "Active";
                  }
                  return "Closed";

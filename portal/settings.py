@@ -133,7 +133,7 @@ STATICFILES_DIRS = (
     'logo/',
     'portal/'
 )
-STATIC_ROOT = BASE_DIR / 'static_root'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR
